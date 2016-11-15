@@ -10,5 +10,4 @@ public class CrimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crime);
     }
-    // first commit
 }
