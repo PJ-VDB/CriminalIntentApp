@@ -9,6 +9,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 /**
@@ -18,8 +21,11 @@ import android.widget.EditText;
 
 
 public class CrimeFragment extends Fragment {
+
     private Crime mCrime;
-    private EditText mTitleField;
+    private EditText mTitleField; // EditText for the title
+    private Button mDateButton; // Button that displays the date
+    private CheckBox mSolvedCheckBox; // Checkbox that shows if the crime has been solved
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,22 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        // the date button
+        mDateButton = (Button) v.findViewById(R.id.crime_date);
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(getContext());
+        String dateString = dateFormat.format(mCrime.getDate());
+        mDateButton.setText(dateString);
+        mDateButton.setEnabled(false); // the button is not clickable for now; will be changed in Chapter 13
+
+        // the checkbox
+        mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Set the crime's solved property
+                mCrime.setSolved(isChecked);
+            }
+        });
 
         return v;
     }
