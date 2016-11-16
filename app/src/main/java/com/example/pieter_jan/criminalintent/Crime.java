@@ -1,5 +1,7 @@
 package com.example.pieter_jan.criminalintent;
 
+import android.content.Context;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,6 +15,7 @@ public class Crime {
     private String mTitle; //The tile of the crime
     private Date mDate; //The date a crime occured
     private boolean mSolved; //Has the crime been solved
+    private Context context;
 
     public Crime() {
         // Generate unique identifier
@@ -34,6 +37,12 @@ public class Crime {
 
     public Date getDate() {
         return mDate;
+    }
+
+    public String getDateFormatted() {
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(context);
+        String dateString = dateFormat.format(mDate);
+        return dateString;
     }
 
     public void setDate(Date date) {

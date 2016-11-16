@@ -61,9 +61,7 @@ public class CrimeFragment extends Fragment {
 
         // the date button
         mDateButton = (Button) v.findViewById(R.id.crime_date);
-        java.text.DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(getContext());
-        String dateString = dateFormat.format(mCrime.getDate());
-        mDateButton.setText(dateString);
+        mDateButton.setText(mCrime.getDateFormatted());
         mDateButton.setEnabled(false); // the button is not clickable for now; will be changed in Chapter 13
 
         // the checkbox

@@ -28,4 +28,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //noinspection GradleCompatible
     compile 'com.android.support:support-v4:25.0.0'
+    //noinspection GradleCompatible
+    compile 'com.android.support:recyclerview-v7:25.0.0'
 }
