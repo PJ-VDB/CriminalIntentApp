@@ -22,6 +22,10 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
 
+    // Chapter 10 Challenge
+    private int savedPosition;
+    private static final String SAVED_POSITION = "SAVED_POSITION";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +35,11 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        if (savedInstanceState != null) {
+            savedPosition = savedInstanceState.getInt(SAVED_POSITION);
+        }
+
+//        updateUI(); // It will be called anyway in onResume, if it is called twice then the savedPosition is initialized to 0 -> wrong
 
         return view;
     }
@@ -40,6 +48,12 @@ public class CrimeListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(SAVED_POSITION, savedPosition);
     }
 
     // Create and connect Adapter to RecyclerView
@@ -51,7 +65,8 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyDataSetChanged();
+
+            mAdapter.notifyItemChanged(savedPosition);
         }
 
     }
@@ -84,6 +99,8 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v) {
 //            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+
+            savedPosition = getAdapterPosition();
 
             // Start the CrimeActivity here
             Intent intent = CrimeActivity.newIntent(getActivity(),mCrime.getId());
