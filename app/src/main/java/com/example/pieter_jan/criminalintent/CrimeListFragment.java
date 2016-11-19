@@ -102,8 +102,8 @@ public class CrimeListFragment extends Fragment {
 
             savedPosition = getAdapterPosition();
 
-            // Start the CrimeActivity here
-            Intent intent = CrimeActivity.newIntent(getActivity(),mCrime.getId());
+            // Start the CrimePagerActivity here
+            Intent intent = CrimePagerActivity.newIntent(getActivity(),mCrime.getId());
             startActivity(intent);
 
         }
