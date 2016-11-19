@@ -24,6 +24,7 @@ public class DatePickerFragment extends DialogFragment {
 
     private static final String ARG_DATE = "date";
     public static final String EXTRA_DATE = "com.example.pieter_jan.criminalintent.date";
+    private Calendar mCalendar;
 
     private DatePicker mDatePicker;
 
@@ -37,6 +38,10 @@ public class DatePickerFragment extends DialogFragment {
         // Create a calendar and initialize it with the date
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+
+        mCalendar = Calendar.getInstance();
+        mCalendar.setTime(date);
+
         // Get the information in int's from the calendar object
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -47,7 +52,7 @@ public class DatePickerFragment extends DialogFragment {
 
         // Initialize the DatePicker with the correct date, obtained from the calendar object
         mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_date_picker);
-        mDatePicker.init(year,month,day,null);
+        mDatePicker.init(year,month,day, null);
 
         // Build an AlertDialog with a tile and one OK button, and the date picker
         return new AlertDialog.Builder(getActivity()).setView(v).setTitle(R.string.date_picker_title)
@@ -57,7 +62,12 @@ public class DatePickerFragment extends DialogFragment {
                         int year = mDatePicker.getYear();
                         int month = mDatePicker.getMonth();
                         int day = mDatePicker.getDayOfMonth();
-                        Date date = new GregorianCalendar(year, month, day).getTime();
+
+                        int hour   = mCalendar.get(Calendar.HOUR_OF_DAY);
+                        int minute = mCalendar.get(Calendar.MINUTE);
+                        int second = mCalendar.get(Calendar.SECOND);
+
+                        Date date = new GregorianCalendar(year, month, day, hour, minute, second).getTime();
                         sendResult(Activity.RESULT_OK, date);
                     }
                 })

@@ -41,12 +41,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
+        <Button
+            android:id="@+id/crime_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
         <CheckBox
             android:id="@+id/crime_solved"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/crime_solved_label"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            />
+
 
 </LinearLayout>

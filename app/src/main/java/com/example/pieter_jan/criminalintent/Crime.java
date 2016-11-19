@@ -2,6 +2,7 @@ package com.example.pieter_jan.criminalintent;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -43,6 +44,12 @@ public class Crime {
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(context);
         String dateString = dateFormat.format(mDate);
         return dateString;
+    }
+
+    public String getTimeFormatted(){
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String time = localDateFormat.format(mDate);
+        return time;
     }
 
     public void setDate(Date date) {
