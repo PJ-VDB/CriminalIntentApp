@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by pieter-jan on 11/15/2016.
  */
@@ -22,6 +24,7 @@ import android.widget.EditText;
 
 public class CrimeFragment extends Fragment {
 
+    private static final String ARG_CRIME_ID = "crime_id";
     private Crime mCrime;
     private EditText mTitleField; // EditText for the title
     private Button mDateButton; // Button that displays the date
@@ -30,7 +33,10 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+
+        UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+
     }
 
     @Nullable
@@ -42,6 +48,7 @@ public class CrimeFragment extends Fragment {
 
         // Also wire up widgets here
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
+        mTitleField.setText(mCrime.getTitle()); // Set the title with the existing title of the crime
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,6 +73,7 @@ public class CrimeFragment extends Fragment {
 
         // the checkbox
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -76,4 +84,16 @@ public class CrimeFragment extends Fragment {
 
         return v;
     }
+
+    // Create a bundle with the arguments that are connected to the CrimeFragment;
+    // Has to happen after the Fragment gets created but Before it is added to the activity
+    public static CrimeFragment newInstance(UUID crimeId){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment(); // Create a new fragment using the self implemented abstract class SimpleFragment
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 }
