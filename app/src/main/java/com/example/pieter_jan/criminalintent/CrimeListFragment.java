@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -34,6 +35,10 @@ public class CrimeListFragment extends Fragment {
     private int savedPosition;
     private static final String SAVED_POSITION = "SAVED_POSITION";
 
+    // Chapter 13 Challenge: empty view list
+    private TextView mEmptyView;
+    private Button mEmptyButton;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,7 @@ public class CrimeListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
+
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -57,7 +63,27 @@ public class CrimeListFragment extends Fragment {
 
 //        updateUI(); // It will be called anyway in onResume, if it is called twice then the savedPosition is initialized to 0 -> wrong
 
+
+        // The empty view
+
+        mEmptyView = (TextView) view.findViewById(R.id.text_view_empty_list);
+        mEmptyButton = (Button) view.findViewById(R.id.button_empty_list);
+        mEmptyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewCrime();
+            }
+        });
+
+
         return view;
+    }
+
+    private void createNewCrime() {
+        Crime crime = new Crime();
+        CrimeLab.get(getActivity()).addCrime(crime);
+        Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId());
+        startActivity(intent);
     }
 
     @Override
@@ -123,6 +149,16 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyDataSetChanged(); // The whole dataset changes when an item is added or removed
 //            mAdapter.notifyItemChanged(savedPosition); // This was to make the recyclerview more efficient,
 // but it doesn't work when a crime is deleted, then the whole dataset changes :/
+        }
+
+        if (crimes.isEmpty()){
+            mCrimeRecyclerView.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+            mEmptyButton.setVisibility(View.VISIBLE);
+        } else {
+            mCrimeRecyclerView.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
+            mEmptyButton.setVisibility(View.GONE);
         }
 
         updateSubtitle();
