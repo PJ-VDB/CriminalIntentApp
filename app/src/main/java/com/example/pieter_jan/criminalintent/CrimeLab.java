@@ -55,6 +55,17 @@ public class CrimeLab {
         mCrimes.add(c);
     }
 
+    public void deleteCrime(Crime c){
+
+//        while (mCrimes.hasNext())
+        for (Crime crime : mCrimes){
+            if (crime.getId().equals(c.getId())){
+                mCrimes.remove(crime); // Maybe we have to iterate over the list to find the object? (We will see...)
+                break;
+            }
+        }
+    }
+
 
 
 }

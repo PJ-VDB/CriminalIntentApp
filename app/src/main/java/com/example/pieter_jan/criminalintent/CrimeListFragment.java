@@ -100,6 +100,7 @@ public class CrimeListFragment extends Fragment {
                 startActivity(intent); // Give the intent
                 return true; // action completed
 
+
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
                 getActivity().invalidateOptionsMenu();
@@ -119,8 +120,9 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-
-            mAdapter.notifyItemChanged(savedPosition);
+            mAdapter.notifyDataSetChanged(); // The whole dataset changes when an item is added or removed
+//            mAdapter.notifyItemChanged(savedPosition); // This was to make the recyclerview more efficient,
+// but it doesn't work when a crime is deleted, then the whole dataset changes :/
         }
 
         updateSubtitle();
