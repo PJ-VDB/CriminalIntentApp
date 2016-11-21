@@ -118,7 +118,15 @@ public class CrimeLab {
                 new String[] {uuidString});
     }
 
+    // Challenge
     public void deleteCrime(Crime c){
+
+        UUID id = c.getId();
+
+        String whereClause = CrimeTable.Cols.UUID + " = ?";
+        String[] whereArgs = new String[] {id.toString()};
+
+        mDatabase.delete(CrimeTable.NAME, whereClause, whereArgs);
 
 //        for (Crime crime : mCrimes){
 //            if (crime.getId().equals(c.getId())){
