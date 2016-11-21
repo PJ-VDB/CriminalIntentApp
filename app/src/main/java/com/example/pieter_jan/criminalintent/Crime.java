@@ -18,8 +18,17 @@ public class Crime {
     private Context context;
 
     public Crime() {
-        // Generate unique identifier
-        mId = UUID.randomUUID();
+
+        this(UUID.randomUUID());
+
+        // Old code
+//        // Generate unique identifier
+//        mId = UUID.randomUUID();
+//        mDate = new Date();
+    }
+
+    public Crime(UUID id){
+        mId = id;
         mDate = new Date();
     }
 

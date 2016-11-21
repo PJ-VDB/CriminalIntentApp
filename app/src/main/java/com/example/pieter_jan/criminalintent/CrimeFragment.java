@@ -100,6 +100,7 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+
         // the date button
         mDateButton = (Button) v.findViewById(R.id.crime_date);
         updateDate(mCrime.getDateFormatted());
@@ -128,6 +129,14 @@ public class CrimeFragment extends Fragment {
         });
 
         return v;
+    }
+
+    // update the list of crimes
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
     }
 
     // Get the date from the DatePicker and bind it to the crime

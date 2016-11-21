@@ -146,6 +146,7 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setCrimes(crimes);
             mAdapter.notifyDataSetChanged(); // The whole dataset changes when an item is added or removed
 //            mAdapter.notifyItemChanged(savedPosition); // This was to make the recyclerview more efficient,
 // but it doesn't work when a crime is deleted, then the whole dataset changes :/
@@ -266,6 +267,13 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+
+        // Swap out the crimes the adapter displays (needed with database)
+        public void setCrimes(List<Crime> crimes){
+            mCrimes = crimes;
+        }
+
     }
 
 
