@@ -17,6 +17,7 @@ public class Crime {
     private boolean mSolved; //Has the crime been solved
     private Context context;
     private String mSuspect;
+    private long mContactId;
 
     public Crime() {
 
@@ -73,5 +74,13 @@ public class Crime {
 
     public void setSolved(boolean solved) {
         mSolved = solved;
+    }
+
+    public long getContactId() {
+        return mContactId;
+    }
+
+    public void setContactId(long contactId) {
+        mContactId = contactId;
     }
 }

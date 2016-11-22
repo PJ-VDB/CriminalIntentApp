@@ -20,6 +20,7 @@ public class CrimeDBSchema {
             public static final String SOLVED = "solved";
             // new column in chapter 15
             public static final String SUSPECT = "suspect";
+            public static final String CONTACT_ID = "contact_id";
         }
     }
 }

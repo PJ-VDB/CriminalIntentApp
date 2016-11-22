@@ -15,6 +15,7 @@ import android.support.v4.app.ShareCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +44,9 @@ public class CrimeFragment extends Fragment {
     // A request code for the FragmentManager
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
+    private static final int REQUEST_CALL = 2;
+
+    private static final String DEBUG_TAG = "CrimeFragment";
 
     private Crime mCrime;
     private EditText mTitleField; // EditText for the title
@@ -50,6 +54,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckBox; // Checkbox that shows if the crime has been solved
     private Button mReportButton;
     private Button mSuspectButton;
+    private Button mCallButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,7 +147,7 @@ public class CrimeFragment extends Fragment {
         mReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = ShareCompat.IntentBuilder.from(getActivity())
+                Intent i = ShareCompat.IntentBuilder.from(getActivity()) // Create an intent using the sharecompat.intentbuilder library
                         .setType("text/plain")
                         .setText(getCrimeReport())
                         .setSubject(getString(R.string.crime_report_subject))
@@ -171,6 +176,50 @@ public class CrimeFragment extends Fragment {
         if(mCrime.getSuspect() != null) {
             mSuspectButton.setText(mCrime.getSuspect());
         }
+
+
+        // Call the suspect button
+
+        mCallButton = (Button) v.findViewById(R.id.crime_call_suspect);
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Uri contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                String selectClause = ContactsContract.CommonDataKinds.Phone._ID + " = ?";
+
+                String[] fields = {ContactsContract.CommonDataKinds.Phone.NUMBER};
+                String[] selectParams = {Long.toString(mCrime.getContactId())};
+
+                Cursor cursor = getActivity().getContentResolver().query(contentUri, fields, selectClause, selectParams, null);
+
+                if(cursor != null && cursor.getCount() >0)
+                {
+                    try
+                    {
+                        cursor.moveToFirst();
+
+                        String number = cursor.getString(0);
+
+                        Uri phoneNumber = Uri.parse("tel:" + number);
+                        Log.d(DEBUG_TAG, phoneNumber.toString());
+
+                        Intent intent = new Intent(Intent.ACTION_DIAL, phoneNumber);
+
+                        startActivity(intent);
+
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+        });
+
+        if (mCrime.getSuspect() == null) {
+            mCallButton.setEnabled(false);
+        }
+
+
 
             // Check if there really is an application to carry out this implicit intent for the contacts
         PackageManager packageManager = getActivity().getPackageManager();
@@ -207,7 +256,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_CONTACT && data != null){
             Uri contactUri = data.getData();
             // Specify whicch fields you want your query to return values for.
-            String[] queryFields = new String[] {ContactsContract.Contacts.DISPLAY_NAME};
+            String[] queryFields = new String[] {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID};
 
             // Perform your query - the contactUri is like a "where" clause here
             Cursor c = getActivity().getContentResolver().query(contactUri, queryFields, null, null, null);
@@ -220,13 +269,21 @@ public class CrimeFragment extends Fragment {
 
                 //Pull out the first column of the first row of data - that is the name of the suspect
                 c.moveToFirst();
-                String suspect = c.getString(0);
+                String suspect = c.getString(0); // the contact's name
+                long contactId = c.getLong(1); // the contact's id
+
                 mCrime.setSuspect(suspect);
+                mCrime.setContactId(contactId);
+
                 mSuspectButton.setText(suspect);
+
+                mSuspectButton.setEnabled(true); // enables the call suspect button and changes the text
+
+                mCallButton.setEnabled(true);
+
             } finally {
                 c.close(); // again close the cursor to avoid nasty errors
             }
-
         }
 
     }
