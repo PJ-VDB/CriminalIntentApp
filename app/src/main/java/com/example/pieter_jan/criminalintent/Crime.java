@@ -16,6 +16,7 @@ public class Crime {
     private Date mDate; //The date a crime occured
     private boolean mSolved; //Has the crime been solved
     private Context context;
+    private String mSuspect;
 
     public Crime() {
 
@@ -46,6 +47,14 @@ public class Crime {
 
     public Date getDate() {
         return mDate;
+    }
+
+    public String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String suspect) {
+        mSuspect = suspect;
     }
 
     public String getDateFormatted() {

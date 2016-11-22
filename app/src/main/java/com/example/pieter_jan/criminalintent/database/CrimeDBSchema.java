@@ -18,6 +18,8 @@ public class CrimeDBSchema {
             public static final String TITLE = "title";
             public static final String DATE = "date";
             public static final String SOLVED = "solved";
+            // new column in chapter 15
+            public static final String SUSPECT = "suspect";
         }
     }
 }
