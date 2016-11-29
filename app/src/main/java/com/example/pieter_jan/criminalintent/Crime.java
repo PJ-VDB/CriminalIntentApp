@@ -83,4 +83,10 @@ public class Crime {
     public void setContactId(long contactId) {
         mContactId = contactId;
     }
+
+    //get a well-known filename to store the photo; it is unique since it is based on the Crime's ID
+    public String getPhotoFilename(){
+        return "IMG_" + getId().toString() + ".jpg";
+    }
+
 }

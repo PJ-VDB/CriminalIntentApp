@@ -4,10 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
+import android.util.Log;
 
 import com.example.pieter_jan.criminalintent.database.CrimeBaseHelper;
 import com.example.pieter_jan.criminalintent.database.CrimeCursorWrapper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +26,7 @@ import static com.example.pieter_jan.criminalintent.database.CrimeDBSchema.Crime
 
 public class CrimeLab {
 
+    private static final String TAG = "CrimeLab";
     private static CrimeLab sCrimeLab; // A static variable (s)
 //    private List<Crime> mCrimes;
 
@@ -162,6 +166,19 @@ public class CrimeLab {
         return new CrimeCursorWrapper(cursor);
     }
 
+    // Return File object that points to external storage where the photo can be saved
+    public File getPhotoFile(Crime crime) {
+        File externalFilesDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
+        if (externalFilesDir == null) // there is no such directory
+        {
+            return null;
+        }
+
+        Log.d(TAG, "getPhotoFile: " + externalFilesDir.toString());
+
+        return new File(externalFilesDir, crime.getPhotoFilename());
+
+    }
 
 }
