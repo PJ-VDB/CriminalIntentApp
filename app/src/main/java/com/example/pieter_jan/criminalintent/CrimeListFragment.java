@@ -1,5 +1,6 @@
 package com.example.pieter_jan.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,7 @@ public class CrimeListFragment extends Fragment {
     // Chapter 13 Challenge: empty view list
     private TextView mEmptyView;
     private Button mEmptyButton;
+    private Callbacks mCallbacks;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,8 +124,12 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_crime:
                 Crime crime = new Crime(); // Create a new crime
                 CrimeLab.get(getActivity()).addCrime(crime); // Add a crime to the database
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId()); // Create an intent for the CrimePagerActivity
-                startActivity(intent); // Give the intent
+//                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId()); // Create an intent for the CrimePagerActivity
+//                startActivity(intent); // Give the intent
+
+                updateUI();
+                mCallbacks.onCrimeSelected(crime);
+
                 return true; // action completed
 
 
@@ -138,7 +144,7 @@ public class CrimeListFragment extends Fragment {
     }
 
         // Create and connect Adapter to RecyclerView
-    private void updateUI() {
+    public void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
@@ -181,10 +187,26 @@ public class CrimeListFragment extends Fragment {
     }
 
 
+/////////////////////// Add the Callback interface needed for the tablet functionality
+    // Required for hosting activities
 
+    public interface Callbacks{
+        void onCrimeSelected(Crime crime);
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
+    }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,8 +243,10 @@ public class CrimeListFragment extends Fragment {
             savedPosition = getAdapterPosition();
 
             // Start the CrimePagerActivity here
-            Intent intent = CrimePagerActivity.newIntent(getActivity(),mCrime.getId());
-            startActivity(intent);
+//            Intent intent = CrimePagerActivity.newIntent(getActivity(),mCrime.getId());
+//            startActivity(intent);
+
+            mCallbacks.onCrimeSelected(mCrime);
 
         }
     }
